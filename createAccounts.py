@@ -2,6 +2,7 @@ import ldap
 import sys
 import os
 import csv
+import crypt
 
 user_list_file = []
 user_entries = []
@@ -15,4 +16,19 @@ with open(sys.argv[0]) as f:
     for entry in csv_reader:
         user_entries.append(entry)
 
-con = ldap.initialize('ldap://localhost') 
+conn = ldap.initialize('ldap://server01.morris.umn.edu:389') 
+
+""" Work in progress """
+def generateSalt(len=8):
+    longEnough = false;
+    finalSalt = ""
+    while not longEnough:
+        salt = crypt.mksalt(crypt.METHOD_SHA512)
+        if len <= len(salt):
+            longEnough = true;
+            finalSalt = salt[0,len]
+        else:
+            finalSalt += salt
+            longEnough = false;
+
+    
